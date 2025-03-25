@@ -3,13 +3,14 @@ from django.http import Http404
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .models import Todo
-from .serialazers import TodoSerialaizer
+from .serialazers import TodoSerialaizer, UserSerialaizer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import mixins, generics
 from rest_framework import viewsets
 
+from .models import user
 
 # Create your views here.
 
@@ -227,3 +228,10 @@ class TodoRetrieveAndUpdateAndDestroyAPIView(generics.RetrieveUpdateDestroyAPIVi
 class TodosAllCURDWithViewSetsAPIView(viewsets.ModelViewSet):
     queryset = Todo.objects.order_by("todo_priority").all()
     serializer_class = TodoSerialaizer
+    
+    
+    
+# users
+class AllUsersViewSetsAPIView(generics.ListAPIView):
+    queryset = user.objects.all()
+    serializer_class = UserSerialaizer

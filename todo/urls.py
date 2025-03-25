@@ -16,4 +16,6 @@ urlpatterns = [
     path('generics/',view=views.TodosListAndCreateGenericsAPIView.as_view()),  
     path('generics/<int:pk>',view=views.TodoRetrieveAndUpdateAndDestroyAPIView.as_view()),  
     path('viewsets/', include(router.urls)),
+    
+    path('users/', view= views.AllUsersViewSetsAPIView.as_view()),
 ]
