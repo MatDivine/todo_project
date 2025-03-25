@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import mixins, generics
-
+from rest_framework import viewsets
 
 
 # Create your views here.
@@ -219,3 +219,11 @@ class TodosListAndCreateGenericsAPIView(generics.ListCreateAPIView):
 class TodoRetrieveAndUpdateAndDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Todo.objects.order_by("todo_priority").all()
     serializer_class = TodoSerialaizer  
+    
+    
+# viewsets
+
+
+class TodosAllCURDWithViewSetsAPIView(viewsets.ModelViewSet):
+    queryset = Todo.objects.order_by("todo_priority").all()
+    serializer_class = TodoSerialaizer
