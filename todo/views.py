@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import mixins, generics
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 
 from .models import user
 
@@ -212,14 +213,25 @@ class TodosDetaileMixinAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixi
 
 # generics
 
+
+class TodosGenericPagination(PageNumberPagination):
+    page_size = 1
+
+
 class TodosListAndCreateGenericsAPIView(generics.ListCreateAPIView):
     queryset = Todo.objects.order_by("todo_priority").all()
     serializer_class = TodoSerialaizer
+    pagination_class = TodosGenericPagination
+    # pagination_class = PageNumberPagination
+    # pagination_class.page_size = 3
+    
     
 
 class TodoRetrieveAndUpdateAndDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Todo.objects.order_by("todo_priority").all()
-    serializer_class = TodoSerialaizer  
+    serializer_class = TodoSerialaizer
+    pagination_class = TodosGenericPagination
+    
     
     
 # viewsets
@@ -228,6 +240,7 @@ class TodoRetrieveAndUpdateAndDestroyAPIView(generics.RetrieveUpdateDestroyAPIVi
 class TodosAllCURDWithViewSetsAPIView(viewsets.ModelViewSet):
     queryset = Todo.objects.order_by("todo_priority").all()
     serializer_class = TodoSerialaizer
+    pagination_class = LimitOffsetPagination
     
     
     
