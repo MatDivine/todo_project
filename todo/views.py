@@ -7,6 +7,10 @@ from .serialazers import TodoSerialaizer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from rest_framework import mixins, generics
+
+
+
 # Create your views here.
 
 
@@ -164,4 +168,54 @@ class TodoDetailAPIView(APIView):
         )
         
         
-        
+
+
+# mixins and generics
+
+
+class TodosListMixinAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Todo.objects.order_by("todo_priority").all()
+    serializer_class = TodoSerialaizer
+    
+    def get(self, request : Request):
+        return self.list(request=request)
+    
+    def post(self, request : Request):
+        return self.create(request=request)
+
+
+
+class TodosDetaileMixinAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Todo.objects.order_by("todo_priority").all()
+    serializer_class = TodoSerialaizer
+    
+    def get(self, request : Request, pk : int):
+        return self.retrieve(
+            request,
+            pk,
+        )
+    
+    def put(self, request : Request, pk : int):
+        return self.update(
+            request,
+            pk,
+        )
+
+    def delete(self, request : Request, pk : int):
+        return self.destroy(
+            request,
+            pk,
+        )
+
+
+
+# generics
+
+class TodosListAndCreateGenericsAPIView(generics.ListCreateAPIView):
+    queryset = Todo.objects.order_by("todo_priority").all()
+    serializer_class = TodoSerialaizer
+    
+
+class TodoRetrieveAndUpdateAndDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Todo.objects.order_by("todo_priority").all()
+    serializer_class = TodoSerialaizer  
