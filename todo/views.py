@@ -1,0 +1,167 @@
+from django.shortcuts import render
+from django.http import Http404
+from rest_framework.request import Request
+from rest_framework.response import Response
+from .models import Todo
+from .serialazers import TodoSerialaizer
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+# Create your views here.
+
+
+
+# function base view methodes
+
+# CRUD
+
+# CR from CRUD
+@api_view(['GET', 'POST'])
+def all_todos(request : Request):
+
+    if request.method == "GET":
+        todos = Todo.objects.order_by("todo_priority").all()
+        todo_serializer = TodoSerialaizer(todos, many = True)
+        return Response(
+            todo_serializer.data,
+            status=status.HTTP_200_OK,
+        )
+    elif request.method == "POST":
+        todo_deserializer = TodoSerialaizer(data = request.data)
+        if todo_deserializer.is_valid():
+            todo_deserializer.save()
+            return Response(
+                todo_deserializer.data,
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(
+                todo_deserializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    else:
+        return Response(None,status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    
+# RUD from CRUD
+@api_view(['GET', 'PUT', 'DELETE'])
+def todo_detail_view(request : Request, todo_id : int):
+    try:
+        todo = Todo.objects.get(pk = todo_id)
+    except Todo.DoesNotExist:
+        return Response(
+            None,
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    if request.method == "GET":
+        todo_serializer = TodoSerialaizer(todo, many = False)
+        return Response(
+            todo_serializer.data,
+            status=status.HTTP_200_OK,
+        )
+    elif request.method == "PUT":
+        todo_deserializer = TodoSerialaizer(todo, data = request.data)
+        if todo_deserializer.is_valid():
+            todo_deserializer.save()
+            return Response(
+                data=todo_deserializer.data,
+                status=status.HTTP_202_ACCEPTED,
+                )
+        else:
+            return Response(
+                None,
+                status=status.HTTP_404_NOT_FOUND,
+            )
+   
+    elif request.method == "DELETE":
+        todo.delete()
+        return Response(
+            data=None,
+            status=status.HTTP_204_NO_CONTENT,
+        )
+        
+    else:
+        return Response(None,status=status.HTTP_400_BAD_REQUEST)
+    
+    
+
+
+# class base view methodes
+
+
+class TodosListAPIView(APIView):
+    def get(self, request : Request):
+        todos = Todo.objects.order_by("todo_priority").all()
+        todos_serializer = TodoSerialaizer(todos, many = True)
+        return Response(
+            data=todos_serializer.data,
+            status=status.HTTP_200_OK,
+        )
+    
+    def post(self, request : Request):
+        todo_deserializer = TodoSerialaizer(data = request.data)
+        if todo_deserializer.is_valid():
+            todo_deserializer.save()
+            return Response(
+                todo_deserializer.data,
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(
+                todo_deserializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+            
+class TodoDetailAPIView(APIView):
+    def get_object(self, todo_id : int):
+        try:
+            todo = Todo.objects.get(pk = todo_id)
+            return todo
+        except Todo.DoesNotExist:
+            return Response(
+                None,
+                status=status.HTTP_404_NOT_FOUND,
+            )
+    def get(self, request : Request, todo_id : int):
+        todo = self.get_object(todo_id=todo_id)
+        if isinstance(todo, Response):
+            return todo
+        todo_serializer = TodoSerialaizer(todo, many = False)
+        return Response(
+            todo_serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+    def put(self, request : Request, todo_id : int):
+        todo = self.get_object(todo_id=todo_id)
+        if isinstance(todo, Response):
+            return todo
+        todo_deserializer = TodoSerialaizer(todo, data = request.data)
+        if todo_deserializer.is_valid():
+            todo_deserializer.save()
+            return Response(
+                data=todo_deserializer.data,
+                status=status.HTTP_202_ACCEPTED,
+                )
+        else:
+            return Response(
+                None,
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+    def delete(self, request : Request, todo_id : int):
+        todo : Todo
+        todo = self.get_object(todo_id=todo_id)
+        if isinstance(todo, Response):
+            return todo
+        todo.delete()
+        return Response(
+            data=None,
+            status=status.HTTP_204_NO_CONTENT,
+        )
+        
+        
+        
