@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'drf_spectacular',
 ]
 
 
@@ -148,11 +149,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' : [
         # "rest_framework.authentication.BasicAuthentication"
         # "rest_framework.authentication.TokenAuthentication"
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
+        
+       # 'rest_framework_simplejwt.authentication.JWTAuthentication'
         ],
     'DEFAULT_PERMISSION_CLASSES' : [
-        "rest_framework.permissions.IsAuthenticated"
-        ]
+       # "rest_framework.permissions.IsAuthenticated"
+        ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     
 }
 
@@ -167,4 +170,15 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(seconds=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(seconds=480)
+}
+
+
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Todo',
+    'DESCRIPTION': 'Cfreate api for Todo requests',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }

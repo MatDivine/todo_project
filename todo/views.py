@@ -12,7 +12,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+from drf_spectacular.utils import extend_schema
 
 from .models import user
 
@@ -25,6 +25,12 @@ from .models import user
 # CRUD
 
 # CR from CRUD
+@extend_schema(
+        request=TodoSerialaizer,
+        responses={201: TodoSerialaizer},
+        description="this api use for class base view api"
+    )
+
 @api_view(['GET', 'POST'])
 def all_todos(request : Request):
 
@@ -54,6 +60,11 @@ def all_todos(request : Request):
     
     
 # RUD from CRUD
+@extend_schema(
+        request=TodoSerialaizer,
+        responses={201: TodoSerialaizer},
+        description="this api use for class base view api"
+    )
 @api_view(['GET', 'PUT', 'DELETE'])
 def todo_detail_view(request : Request, todo_id : int):
     try:
@@ -99,7 +110,11 @@ def todo_detail_view(request : Request, todo_id : int):
 
 # class base view methodes
 
-
+@extend_schema(
+        request=TodoSerialaizer,
+        responses={201: TodoSerialaizer},
+        description="this api use for class base view api"
+    )
 class TodosListAPIView(APIView):
     def get(self, request : Request):
         todos = Todo.objects.order_by("todo_priority").all()
@@ -123,7 +138,11 @@ class TodosListAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
             
-            
+@extend_schema(
+        request=TodoSerialaizer,
+        responses={201: TodoSerialaizer},
+        description="this api use for class base view api"
+    )          
 class TodoDetailAPIView(APIView):
     def get_object(self, todo_id : int):
         try:
