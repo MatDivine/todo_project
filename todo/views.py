@@ -227,8 +227,9 @@ class TodosListAndCreateGenericsAPIView(generics.ListCreateAPIView):
     pagination_class = TodosGenericPagination
     # pagination_class = PageNumberPagination
     # pagination_class.page_size = 3
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
     
     
     

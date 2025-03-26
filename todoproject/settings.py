@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'home',
     'todo',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,13 +134,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Global settings for pagination
 # from rest_framework.pagination import PageNumberPagination,LimitOffsetPagination
 # from rest_framework.authentication import BasicAuthentication
+# from rest_framework.authentication import TokenAuthentication
 # from rest_framework.permissions import IsAuthenticated
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS' : "rest_framework.pagination.PageNumberPagination",
     'PAGE_SIZE' : 2,
     'DEFAULT_AUTHENTICATION_CLASSES' : [
-        "rest_framework.authentication.BasicAuthentication"
+        # "rest_framework.authentication.BasicAuthentication"
+        "rest_framework.authentication.TokenAuthentication"
         ],
     'DEFAULT_PERMISSION_CLASSES' : [
         "rest_framework.permissions.IsAuthenticated"
