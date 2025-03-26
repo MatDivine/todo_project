@@ -10,6 +10,9 @@ from rest_framework.views import APIView
 from rest_framework import mixins, generics
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 from .models import user
 
@@ -224,6 +227,9 @@ class TodosListAndCreateGenericsAPIView(generics.ListCreateAPIView):
     pagination_class = TodosGenericPagination
     # pagination_class = PageNumberPagination
     # pagination_class.page_size = 3
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     
     
 
