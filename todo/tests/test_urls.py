@@ -22,3 +22,28 @@ class UrlTests(TestCase):
         """Test TodoDetailAPIView URL"""
         url = reverse('todo_detail_cbv', args=[1])
         self.assertEqual(resolve(url).func.view_class, views.TodoDetailAPIView)
+
+    def test_todos_list_mixin_url(self):
+        """Test TodosListMixinAPIView URL"""
+        url = reverse('todos_list_mixin')
+        self.assertEqual(resolve(url).func.view_class, views.TodosListMixinAPIView)
+
+    def test_todo_detail_mixin_url(self):
+        """Test TodosDetaileMixinAPIView URL"""
+        url = reverse('todo_detail_mixin', args=[1])
+        self.assertEqual(resolve(url).func.view_class, views.TodosDetaileMixinAPIView)
+
+    def test_todos_list_generic_url(self):
+        """Test TodosListAndCreateGenericsAPIView URL"""
+        url = reverse('todos_list_generic')
+        self.assertEqual(resolve(url).func.view_class, views.TodosListAndCreateGenericsAPIView)
+
+    def test_todo_detail_generic_url(self):
+        """Test TodoRetrieveAndUpdateAndDestroyAPIView URL"""
+        url = reverse('todo_detail_generic', args=[1])
+        self.assertEqual(resolve(url).func.view_class, views.TodoRetrieveAndUpdateAndDestroyAPIView)
+
+    def test_all_users_url(self):
+        """Test AllUsersViewSetsAPIView URL"""
+        url = reverse('all_users')
+        self.assertEqual(resolve(url).func.view_class, views.AllUsersViewSetsAPIView)

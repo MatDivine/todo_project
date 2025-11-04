@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from serializers import TodoSerialaizer, UserSerialaizer
+from todo.serializers import TodoSerialaizer, UserSerialaizer
 from todo.models import Todo
 
 User = get_user_model()
